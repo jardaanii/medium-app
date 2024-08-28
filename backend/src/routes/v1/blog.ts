@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { authMiddleware } from "../../middlewares";
+import { BlogController } from "../../controllers/blogController";
 
 type Bindings = {
   DATABASE_URL: string;
@@ -11,20 +12,29 @@ export const v1ApiBlogRoutes = new Hono<{ Bindings: Bindings }>();
 
 v1ApiBlogRoutes.use("/*", authMiddleware);
 
-v1ApiBlogRoutes.post("/blog", (c) => {
-  return c.text("You have posted blog successfully");
+v1ApiBlogRoutes.post("/", async (c) => {
+  const controller = new BlogController(c.env.DATABASE_URL);
+
+  return await controller.createBlog(c);
 });
 
-v1ApiBlogRoutes.put("/blog", (c) => {
-  return c.text("You have putted the blog up successfully");
+//Todo: Add pagination
+v1ApiBlogRoutes.get("/bulk", async (c) => {
+  const controller = new BlogController(c.env.DATABASE_URL);
+
+  return await controller.getAllBlogs(c);
 });
 
-v1ApiBlogRoutes.get("/blog/:id", (c) => {
-  return c.text("You have got the bolg with id successfully");
+v1ApiBlogRoutes.put("/:id", async (c) => {
+  const controller = new BlogController(c.env.DATABASE_URL);
+
+  return await controller.updateBlog(c);
 });
 
-v1ApiBlogRoutes.get("/blog/bulk", (c) => {
-  return c.text("You have got the blog  successfully");
+v1ApiBlogRoutes.get("/:id", async (c) => {
+  const controller = new BlogController(c.env.DATABASE_URL);
+
+  return await controller.getBlog(c);
 });
 
 export default v1ApiBlogRoutes;

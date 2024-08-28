@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import { sign } from "hono/jwt";
-import { UserRepository } from "../repository";
+import { UserRepository } from "../repositories/userRepository";
 
 export class UserService {
   private userRepository: UserRepository;
@@ -13,13 +13,8 @@ export class UserService {
     this.salt = salt;
   }
 
-  private async createToken(email: string): Promise<string> {
-    const token = await sign(
-      {
-        email: email,
-      },
-      this.jwtSecret
-    );
+  private async createToken(id: string, email: string): Promise<string> {
+    const token = await sign({ id: id, email: email }, this.jwtSecret);
 
     return token;
   }
@@ -37,7 +32,10 @@ export class UserService {
         password: hashedPassword,
         name: userData.name,
       });
-      const token: Promise<string> = this.createToken(userData.email);
+      const token: Promise<string> = this.createToken(
+        response.id,
+        userData.email
+      );
       return token;
     } catch (error) {
       console.log("Something is wrong in the service layer create");
@@ -49,7 +47,7 @@ export class UserService {
     try {
       const { email, password } = userData;
       const response = await this.userRepository.findUser(userData);
-      const token: Promise<string> = this.createToken(email);
+      const token: Promise<string> = this.createToken(response.userId, email);
       return token;
     } catch (error) {
       console.error("User find error:", error);

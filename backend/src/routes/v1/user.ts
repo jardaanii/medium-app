@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { UserController } from "../../controllers";
+import { UserController } from "../../controllers/userController";
 
 import { validateSignupInput } from "../../middlewares";
 

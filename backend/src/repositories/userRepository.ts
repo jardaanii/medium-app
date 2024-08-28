@@ -17,9 +17,10 @@ export class UserRepository {
 
   async create(userData: { email: string; password: string; name?: string }) {
     try {
-      return await this.prisma.user.create({ data: userData });
+      const response = await this.prisma.user.create({ data: userData });
+      return response;
     } catch (error) {
-      console.error("Database create error:", error);
+      console.error("Database create User error:", error);
       throw new Error("Failed to create user in database");
     }
   }
@@ -28,7 +29,7 @@ export class UserRepository {
     try {
       const user = await this.prisma.user.findUnique({
         where: { email: userData.email },
-        select: { password: true },
+        select: { id: true, password: true },
       });
       if (!user) {
         throw new Error("User not found");
@@ -47,7 +48,7 @@ export class UserRepository {
         throw new Error("Invalid password");
       }
 
-      return true;
+      return { success: true, userId: user.id };
     } catch (error) {
       console.error("Database find user error:", error);
       throw new Error("Failed to find user in database");

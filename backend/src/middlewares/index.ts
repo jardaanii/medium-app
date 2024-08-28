@@ -50,11 +50,12 @@ export async function authMiddleware(c: Context, next: Next) {
   try {
     const payload = await verify(token, c.env.JWT_SECRET);
 
-    if (!payload || !payload.email) {
+    if (!payload || !payload.email || !payload.id) {
       throw new Error("Invalid token payload");
     }
 
     c.set("userEmail", payload.email);
+    c.set("userId", payload.id);
     await next();
   } catch (error) {
     return c.json(

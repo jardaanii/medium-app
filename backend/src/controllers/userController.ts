@@ -1,5 +1,5 @@
 import { Context } from "hono";
-import { UserService } from "../services";
+import { UserService } from "../services/userService";
 
 export class UserController {
   private userService: UserService;
