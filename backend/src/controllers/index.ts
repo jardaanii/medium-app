@@ -55,7 +55,7 @@ export class UserController {
               success: false,
               message: "Invalid email",
             },
-            401
+            403
           );
         } else if (error.message === "Invalid password") {
           return c.json(
@@ -63,7 +63,7 @@ export class UserController {
               success: false,
               message: "Invalid password",
             },
-            401
+            403
           );
         }
       }
