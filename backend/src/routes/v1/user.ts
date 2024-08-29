@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { UserController } from "../../controllers/userController";
-
+import { signupInput, signinInput } from "@trozon/medium-common";
 import { validateSignupInput } from "../../middlewares";
 
 type Bindings = {
@@ -12,6 +12,15 @@ type Bindings = {
 export const v1ApiUserRoutes = new Hono<{ Bindings: Bindings }>();
 
 v1ApiUserRoutes.post("/signup", validateSignupInput, async (c) => {
+  const body = await c.req.json();
+  const { success } = signupInput.safeParse(body);
+  if (!success) {
+    c.status(400);
+    return c.json({
+      message: "Credentials are not correct",
+    });
+  }
+
   const controller = new UserController(
     c.env.DATABASE_URL,
     c.env.JWT_SECRET,
@@ -21,6 +30,15 @@ v1ApiUserRoutes.post("/signup", validateSignupInput, async (c) => {
 });
 
 v1ApiUserRoutes.post("/signin", validateSignupInput, async (c) => {
+  const body = await c.req.json();
+  const { success } = signinInput.safeParse(body);
+  if (!success) {
+    c.status(400);
+    return c.json({
+      message: "Credentials are not correct",
+    });
+  }
+
   const controller = new UserController(
     c.env.DATABASE_URL,
     c.env.JWT_SECRET,
