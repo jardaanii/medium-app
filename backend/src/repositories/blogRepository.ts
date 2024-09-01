@@ -49,6 +49,17 @@ export class BlogRepository {
         where: {
           id: blogId,
         },
+        select: {
+          content: true,
+          title: true,
+          id: true,
+          author: {
+            select: {
+              name: true,
+            },
+          },
+          createdAt: true,
+        },
       });
 
       return blog;
@@ -63,7 +74,19 @@ export class BlogRepository {
 
   async getAll() {
     try {
-      const blogs = await this.prisma.post.findMany();
+      const blogs = await this.prisma.post.findMany({
+        select: {
+          content: true,
+          title: true,
+          id: true,
+          author: {
+            select: {
+              name: true,
+            },
+          },
+          createdAt: true,
+        },
+      });
       return blogs;
     } catch (error) {
       console.log(
