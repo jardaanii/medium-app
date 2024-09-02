@@ -12,7 +12,7 @@ export function Blog() {
     id: id || " ",
   });
 
-  if (loading) {
+  if (loading || !blog) {
     return (
       <div>
         <Appbar />
@@ -23,10 +23,6 @@ export function Blog() {
         </div>
       </div>
     );
-  }
-
-  if (!blog) {
-    return <div className="flex justify-center">No blog found</div>;
   }
 
   return (
