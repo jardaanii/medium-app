@@ -17,7 +17,7 @@ export function Blogs() {
   }
 
   return (
-    <div className=" bg-slate-100">
+    <div className=" bg-slate-50">
       <Appbar />
 
       <div className="flex justify-center">
