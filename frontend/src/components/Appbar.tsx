@@ -2,6 +2,9 @@ import { Link } from "react-router-dom";
 import { Avatar } from "./BlogCard";
 
 export const Appbar = () => {
+  const handleLogout = () => {
+    localStorage.clear(); // This clears all items from localStorage
+  };
   return (
     <div className="border-b sticky top-0  w-full  rounded-lg  shadow-md border-stale-300 bg-slate-400 flex  justify-between py-2 px-10">
       <Link to="/Blogs">
@@ -18,7 +21,7 @@ export const Appbar = () => {
             New
           </button>
         </Link>
-        <Link to="/Signin">
+        <Link to="/Signin" onClick={handleLogout}>
           <Avatar name="Akash" size="big" />
         </Link>
       </div>
